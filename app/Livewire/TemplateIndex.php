@@ -10,6 +10,9 @@ class TemplateIndex extends Component
 {
     use WithPagination;
 
+    public $showDeleteModal = false;
+    public $templateIdToDelete;
+
     public function render()
     {
         return view('livewire.template-index', [
@@ -17,12 +20,25 @@ class TemplateIndex extends Component
         ])->layout('layouts.app');
     }
 
-    public function delete($templateId)
+    public function confirmDelete($templateId)
     {
-        $template = Template::findOrFail($templateId);
+        $this->templateIdToDelete = $templateId;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteTemplate()
+    {
+        $template = Template::findOrFail($this->templateIdToDelete);
         $template->delete();
 
+        $this->showDeleteModal = false;
+
         session()->flash('success', 'Template deleted successfully!');
+    }
+
+    public function cancelDelete()
+    {
+        $this->showDeleteModal = false;
     }
 
     public function duplicate($templateId)
