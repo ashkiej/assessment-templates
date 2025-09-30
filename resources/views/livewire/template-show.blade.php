@@ -28,23 +28,22 @@
                         <th class="text-left p-4 text-lg font-semibold text-gray-800 w-2/5">
                             {{ 'Section ' . $section->order + 1 }}
                         </th>
-                        @if ($section->has_ratings)
-                            @foreach ($section->ratingColumns as $column)
-                                <th class="p-4 font-medium text-gray-800 text-center">
-                                    {{ $column->name }}
-                                </th>
-                            @endforeach
-                        @else
-                            <th class="p-4"></th>
-                        @endif
+
+                        @foreach ($section->ratingColumns as $column)
+                            <th class="p-4 font-medium text-gray-800 text-center">
+                                {{ $column->name }}
+                            </th>
+                        @endforeach
+
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @if ($section->has_ratings)
-                        <tr class="bg-gray-100">
-                            <td class="p-3 pl-6 font-medium">
-                                {{ $section->title }} (Overall)
-                            </td>
+                <tbody class="divide-y
+                                divide-gray-200">
+                    <tr class="bg-gray-100">
+                        <td class="p-3 pl-6 font-medium">
+                            {{ $section->title }} (Overall)
+                        </td>
+                        @if ($section->has_ratings)
                             @foreach ($section->ratingColumns as $column)
                                 <td class="p-3">
                                     <div class="flex gap-1 justify-center">
@@ -59,18 +58,13 @@
                                             NA
                                         </button>
                                     </div>
-                                    {{-- <div class="hidden print:flex gap-1 justify-center">
-                                        @for ($i = 1; $i <= $column->max_rating; $i++)
-                                            <div class="w-8 h-8 border border-gray-400"></div>
-                                        @endfor
-                                        <div
-                                            class="w-8 h-8 border border-gray-400 flex items-center justify-center text-xs">
-                                            NA</div>
-                                    </div> --}}
                                 </td>
                             @endforeach
-                        </tr>
-                    @endif
+                        @else
+                            <td class="p-3 text-center text-gray-400" colspan="{{ count($section->ratingColumns) }}">-
+                            </td>
+                        @endif
+                    </tr>
 
                     @foreach ($section->subsections as $subsection)
                         <tr class="bg-gray-50">
@@ -80,7 +74,7 @@
                                     <span class="text-xs bg-gray-200 px-2 py-1 rounded ml-2">No Ratings</span>
                                 @endif
                             </td>
-                            @if ($section->has_ratings && $subsection->has_ratings)
+                            @if ($subsection->has_ratings)
                                 @foreach ($section->ratingColumns as $column)
                                     <td class="p-3">
                                         <div class="flex gap-1 justify-center ">
@@ -95,17 +89,9 @@
                                                 NA
                                             </button>
                                         </div>
-                                        {{-- <div class="hidden print:flex gap-1 justify-center">
-                                            @for ($i = 1; $i <= $column->max_rating; $i++)
-                                                <div class="w-8 h-8 border border-gray-400"></div>
-                                            @endfor
-                                            <div
-                                                class="w-8 h-8 border border-gray-400 flex items-center justify-center text-xs">
-                                                NA</div>
-                                        </div> --}}
                                     </td>
                                 @endforeach
-                            @elseif ($section->has_ratings)
+                            @else
                                 <td class="p-3 text-center text-gray-400"
                                     colspan="{{ count($section->ratingColumns) }}">-</td>
                             @endif
@@ -120,7 +106,7 @@
                                             Ratings</span>
                                     @endif
                                 </td>
-                                @if ($section->has_ratings && $subsection->has_ratings && $item->has_ratings)
+                                @if ($item->has_ratings)
                                     @foreach ($section->ratingColumns as $column)
                                         <td class="p-3">
                                             <div class="flex gap-1 justify-center">
@@ -135,17 +121,9 @@
                                                     NA
                                                 </button>
                                             </div>
-                                            {{-- <div class="hidden print:flex gap-1 justify-center">
-                                                @for ($i = 1; $i <= $column->max_rating; $i++)
-                                                    <div class="w-8 h-8 border border-gray-400"></div>
-                                                @endfor
-                                                <div
-                                                    class="w-8 h-8 border border-gray-400 flex items-center justify-center text-xs">
-                                                    NA</div>
-                                            </div> --}}
                                         </td>
                                     @endforeach
-                                @elseif($section->has_ratings && $subsection->has_ratings)
+                                @else
                                     @foreach ($section->ratingColumns as $column)
                                         <td class="p-3 text-center text-gray-400">-</td>
                                     @endforeach
