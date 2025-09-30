@@ -10,6 +10,7 @@
             font-family: sans-serif;
             line-height: 1.5;
             color: #333;
+            font-size: 12px;
         }
 
         h1,
@@ -19,24 +20,25 @@
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 16px;
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
         h2 {
-            font-size: 20px;
+            font-size: 14px;
         }
 
         h3 {
-            font-size: 16px;
+            font-size: 12px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            font-size: 12px;
         }
 
         th,
@@ -45,6 +47,7 @@
             padding: 8px;
             text-align: left;
             vertical-align: top;
+            font-size: 12px;
         }
 
         thead th {
@@ -52,16 +55,17 @@
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .subsection-title {
             font-weight: bold;
+            font-size: 12px;
         }
 
         .pl-6 {
-            padding-left: 24px;
+            padding-left: 12px;
         }
 
         .pl-12 {
@@ -70,14 +74,16 @@
 
         .rating-cell {
             text-align: center;
+            font-size: 10px;
         }
 
         .rating-box {
             display: inline-block;
             border: 1px solid #ccc;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             margin-right: 4px;
+            font-size: 10px !important;
         }
     </style>
 </head>
@@ -85,7 +91,7 @@
 <body>
     <h1>{{ $template->name }}</h1>
     @if ($template->description)
-        <p>{{ $template->description }}</p>
+        <p style="font-size:12px;">{{ $template->description }}</p>
     @endif
 
     @foreach ($template->sections as $section)
@@ -93,41 +99,42 @@
             <thead>
                 <tr>
                     <th class="section-title" style="width: 50%;">{{ $section->title }}</th>
-                    @if ($section->has_ratings)
-                        @foreach ($section->ratingColumns as $column)
-                            <th class="rating-cell">{{ $column->name }}</th>
-                        @endforeach
-                    @endif
+                    @foreach ($section->ratingColumns as $column)
+                        <th class="rating-cell">{{ $column->name }}</th>
+                    @endforeach
+
                 </tr>
             </thead>
             <tbody>
-                @if ($section->has_ratings)
-                    <tr>
-                        <td class="pl-6">{{ $section->title }} (Overall)</td>
+                <tr>
+                    <td class="pl-6">{{ $section->title }} (Overall)</td>
+                    @if ($section->has_ratings)
                         @foreach ($section->ratingColumns as $column)
                             <td class="rating-cell">
                                 @for ($i = 1; $i <= $column->max_rating; $i++)
-                                    <span>{{ $i }}</span>
+                                    <span class="rating-box">{{ $i }}</span>
                                 @endfor
-                                <span>N/A</span>
+                                <span class="rating-box">N/A</span>
                             </td>
                         @endforeach
-                    </tr>
-                @endif
+                    @else
+                        <td class="rating-cell" colspan="{{ count($section->ratingColumns) }}">-</td>
+                    @endif
+                </tr>
 
                 @foreach ($section->subsections as $subsection)
                     <tr>
                         <td class="pl-6 subsection-title">{{ $subsection->title }}</td>
-                        @if ($section->has_ratings && $subsection->has_ratings)
+                        @if ($subsection->has_ratings)
                             @foreach ($section->ratingColumns as $column)
                                 <td class="rating-cell">
                                     @for ($i = 1; $i <= $column->max_rating; $i++)
-                                        <span>{{ $i }}</span>
+                                        <span class="rating-box">{{ $i }}</span>
                                     @endfor
-                                    <span>N/A</span>
+                                    <span class="rating-box">N/A</span>
                                 </td>
                             @endforeach
-                        @elseif ($section->has_ratings)
+                        @else
                             <td class="rating-cell" colspan="{{ count($section->ratingColumns) }}">-</td>
                         @endif
                     </tr>
@@ -135,16 +142,16 @@
                     @foreach ($subsection->items as $item)
                         <tr>
                             <td class="pl-12">{{ $item->name }}</td>
-                            @if ($section->has_ratings && $subsection->has_ratings && $item->has_ratings)
+                            @if ($item->has_ratings)
                                 @foreach ($section->ratingColumns as $column)
                                     <td class="rating-cell">
                                         @for ($i = 1; $i <= $column->max_rating; $i++)
-                                            <span>{{ $i }}</span>
+                                            <span class="rating-box">{{ $i }}</span>
                                         @endfor
-                                        <span>N/A</span>
+                                        <span class="rating-box">N/A</span>
                                     </td>
                                 @endforeach
-                            @elseif($section->has_ratings && $subsection->has_ratings)
+                            @else
                                 <td class="rating-cell" colspan="{{ count($section->ratingColumns) }}">-</td>
                             @endif
                         </tr>
